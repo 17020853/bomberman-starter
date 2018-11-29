@@ -45,6 +45,33 @@ public class Flame extends Entity {
 		boolean last;
 
 		// TODO: tạo các segment dưới đây
+		int x = (int)_x;
+		int y=(int) _y;
+		for (int i = 0; i< _flameSegments.length; i++){
+			switch (_direction){
+				case 0:{
+					y--;
+					break;
+				}
+				case 1:{
+					x++;
+					break;
+				}
+
+				case 2:{
+					y++;
+					break;
+				}
+
+				case 3:{
+					x--;
+				}
+			}
+			if (i==_flameSegments.length -1) {
+				_flameSegments[i] = new FlameSegment(x, y, _direction, true);
+			}else
+			_flameSegments[i] = new FlameSegment(x, y, _direction, false);
+		}
 	}
 
 	/**
@@ -53,7 +80,36 @@ public class Flame extends Entity {
 	 */
 	private int calculatePermitedDistance() {
 		// TODO: thực hiện tính toán độ dài của Flame
-		return 1;
+		int flameSegmentLength = 0;
+		int x = (int)_x;
+		int y= (int)_y;
+		while (flameSegmentLength< _radius){
+			switch (_direction){
+				case 0:{
+					y--;
+					break;
+				}
+				case 1:{
+					x++;
+					break;
+				}
+
+				case 2:{
+					y++;
+					break;
+				}
+
+				case 3:{
+					x--;
+				}
+			}
+			Entity entity = _board.getEntity(x, y, null);
+			if (entity!= null && !entity.collide(this)){
+				break;
+			}
+			flameSegmentLength++;
+		}
+		return flameSegmentLength;
 	}
 	
 	public FlameSegment flameSegmentAt(int x, int y) {
